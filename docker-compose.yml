@@ -5,16 +5,16 @@ services:
     container_name: mysql_catalog
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: catalog_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: lander123
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
     ports:
       - "3306:3306"
     volumes:
       - db_data_catalog:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,16 +25,16 @@ services:
     container_name: mysql_checkout
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: checkout_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: lander123
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
     ports:
       - "3307:3306"
     volumes:
       - db_data_checkout:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -45,16 +45,16 @@ services:
     container_name: mysql_email
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: email_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: lander123
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
     ports:
       - "3308:3306"   # unique external port
     volumes:
       - db_data_email:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -69,8 +69,8 @@ services:
         condition: service_healthy
     env_file:
       - ./catalog-service/.env
-    volumes:
-      - ./catalog-service:/var/www
+    # volumes:
+    #   - ./catalog-service:/var/www
     command: sh -c "sleep 10 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
 
   checkout-service:
@@ -85,8 +85,8 @@ services:
         condition: service_started
     env_file:
       - ./checkout-service/.env
-    volumes:
-      - ./checkout-service:/var/www
+    # volumes:
+    #   - ./checkout-service:/var/www
     command: sh -c "sleep 10 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
 
   # ✅ Email service now properly set up
@@ -102,8 +102,8 @@ services:
         condition: service_started
     env_file:
       - ./email-service/.env
-    volumes:
-      - ./email-service:/var/www
+    # volumes:
+    #   - ./email-service:/var/www
     command: sh -c "sleep 10 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
 
   frontend:

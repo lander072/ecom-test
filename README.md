@@ -32,13 +32,22 @@ Frontend (Vue.js) → Catalog Service → MySQL
 
 ## Getting Started
 
-### 1. Start Services
+### 1. Configure Environment
+
+```bash
+# Copy the Docker environment template
+cp .env.docker.example .env.docker
+
+# Edit .env.docker and set your MySQL passwords
+```
+
+### 2. Start Services
 
 ```bash
 docker-compose up -d --build
 ```
 
-### 2. Run Migrations
+### 3. Run Migrations
 
 ```bash
 docker-compose exec catalog-service php artisan migrate --force
@@ -46,7 +55,7 @@ docker-compose exec checkout-service php artisan migrate --force
 docker-compose exec email-service php artisan migrate --force
 ```
 
-### 3. Access Application
+### 4. Access Application
 
 - Frontend: http://localhost:8080
 - Catalog API: http://localhost:8001
