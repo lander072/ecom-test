@@ -1,0 +1,124 @@
+services:
+  # ✅ Existing catalog DB
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_catalog
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: catalog_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: lander123
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data_catalog:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ✅ Checkout DB
+  mysql_checkout:
+    image: mysql:8.0
+    container_name: mysql_checkout
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: checkout_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: lander123
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data_checkout:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ✅ Email DB
+  mysql_email:
+    image: mysql:8.0
+    container_name: mysql_email
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: email_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: lander123
+    ports:
+      - "3308:3306"   # unique external port
+    volumes:
+      - db_data_email:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  catalog-service:
+    build: ./catalog-service
+    container_name: catalog_service
+    ports:
+      - "8001:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - ./catalog-service/.env
+    volumes:
+      - ./catalog-service:/var/www
+    command: sh -c "sleep 10 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+
+  checkout-service:
+    build: ./checkout-service
+    container_name: checkout_service
+    ports:
+      - "8002:8000"
+    depends_on:
+      mysql_checkout:
+        condition: service_healthy
+      catalog-service:
+        condition: service_started
+    env_file:
+      - ./checkout-service/.env
+    volumes:
+      - ./checkout-service:/var/www
+    command: sh -c "sleep 10 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+
+  # ✅ Email service now properly set up
+  email-service:
+    build: ./email-service
+    container_name: email_service
+    ports:
+      - "8003:8000"
+    depends_on:
+      mysql_email:
+        condition: service_healthy
+      checkout-service:
+        condition: service_started
+    env_file:
+      - ./email-service/.env
+    volumes:
+      - ./email-service:/var/www
+    command: sh -c "sleep 10 && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - catalog-service
+      - checkout-service
+      - email-service
+    stdin_open: true
+    tty: true
+
+volumes:
+  db_data_catalog:
+  db_data_checkout:
+  db_data_email:

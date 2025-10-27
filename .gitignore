@@ -1,0 +1,178 @@
+# ==========================================
+# Laravel Services (.gitignore)
+# ==========================================
+
+# Environment files (contain secrets!)
+.env
+.env.*
+!.env.example
+
+# Dependencies
+**/vendor/
+**/node_modules/
+
+# Laravel specific
+**/bootstrap/cache/*
+**/storage/framework/cache/*
+**/storage/framework/sessions/*
+**/storage/framework/views/*
+**/storage/logs/*
+**/storage/app/public/*
+!**/storage/framework/.gitkeep
+!**/storage/logs/.gitkeep
+!**/storage/app/.gitkeep
+
+# Compiled files
+**/public/hot
+**/public/storage
+**/public/build
+**/public/mix-manifest.json
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.phar
+composer.lock
+
+# NPM / Yarn
+package-lock.json
+yarn.lock
+npm-debug.log
+yarn-error.log
+
+# ==========================================
+# Vue.js Frontend (.gitignore)
+# ==========================================
+
+# Build output
+frontend/dist/
+frontend/dist-ssr/
+frontend/.nuxt/
+frontend/.output/
+
+# Cache
+frontend/.vite/
+frontend/.cache/
+frontend/.temp/
+
+# ==========================================
+# Docker (.gitignore)
+# ==========================================
+
+# Don't ignore docker-compose.yml - we need it!
+# But ignore any local overrides
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Database data volumes (if using local volumes)
+**/mysql-data/
+**/postgres-data/
+
+# ==========================================
+# AWS / Infrastructure (.gitignore)
+# ==========================================
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# CloudFormation
+# Don't ignore templates, but ignore outputs
+*-outputs.json
+packaged-template.yaml
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
+
+# Credentials (NEVER commit!)
+**/*credentials*
+**/*secrets*
+**/aws-config
+
+# ==========================================
+# Testing (.gitignore)
+# ==========================================
+
+# PHPUnit
+**/phpunit.xml
+!**/phpunit.xml.dist
+**/.phpunit.result.cache
+**/coverage/
+
+# Jest
+**/coverage/
+**/.nyc_output/
+
+# ==========================================
+# Logs & Temporary Files (.gitignore)
+# ==========================================
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# Git & Editor (.gitignore)
+# ==========================================
+
+# Git patches
+*.patch
+*.diff
+
+# Editor directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# ==========================================
+# Project Specific (.gitignore)
+# ==========================================
+
+# Don't commit uploaded files
+catalog-service/storage/app/uploads/
+checkout-service/storage/app/uploads/
+email-service/storage/app/uploads/
+
+# Don't commit generated keys
+**/storage/oauth-*.key
+
+# Build artifacts
+build/
+dist/
+*.zip
+*.tar.gz
+
+# Documentation builds
+docs/_build/
+site/
