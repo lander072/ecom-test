@@ -19,10 +19,10 @@ This system consists of 3 independent microservices:
 
 ## System Diagram
 
-\`\`\`
+```
 Frontend (Vue.js) → Catalog Service → MySQL
                   → Checkout Service → Email Service
-\`\`\`
+```
 
 ## Prerequisites
 
@@ -34,17 +34,17 @@ Frontend (Vue.js) → Catalog Service → MySQL
 
 ### 1. Start Services
 
-\`\`\`bash
+```bash
 docker-compose up -d --build
-\`\`\`
+```
 
 ### 2. Run Migrations
 
-\`\`\`bash
+```bash
 docker-compose exec catalog-service php artisan migrate --force
 docker-compose exec checkout-service php artisan migrate --force
 docker-compose exec email-service php artisan migrate --force
-\`\`\`
+```
 
 ### 3. Access Application
 
@@ -56,39 +56,26 @@ docker-compose exec email-service php artisan migrate --force
 ## API Endpoints
 
 **Catalog Service**
-- \`GET /api/products\` - List products
-- \`GET /api/products/{id}\` - Get product details
+- `GET /api/products` - List products
+- `GET /api/products/{id}` - Get product details
 
 **Checkout Service**
-- \`POST /api/orders\` - Create order
-- \`GET /api/orders/{id}\` - Get order details
+- `POST /api/orders` - Create order
+- `GET /api/orders/{id}` - Get order details
 
 **Email Service**
-- \`POST /api/order-confirmation\` - Send order confirmation
-
-## Useful Commands
-
-\`\`\`bash
-# Stop services
-docker-compose down
-
-# View logs
-docker-compose logs -f
-
-# Access service container
-docker-compose exec catalog-service bash
-\`\`\`
+- `POST /api/order-confirmation` - Send order confirmation
 
 ## Configuration
 
-Each service has a \`.env\` file for configuration. See \`.env.example\` files in each service directory for setup details.
+Each service has a `.env` file for configuration. See `.env.example` files in each service directory for setup details.
 
 ## Project Structure
 
-\`\`\`
+```
 ├── catalog-service/     # Product catalog API
 ├── checkout-service/    # Order management API
 ├── email-service/       # Email notification API
 ├── frontend/            # Vue.js frontend
 └── docker-compose.yml   # Docker configuration
-\`\`\`
+```
