@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
+import { API_ENDPOINTS } from '../config/api'
 
 interface Product {
   id: number
@@ -32,7 +33,7 @@ const fetchProduct = async () => {
   try {
     loading.value = true
     error.value = ''
-    const response = await fetch(`http://localhost:8001/api/products/${productId.value}`)
+    const response = await fetch(API_ENDPOINTS.product(Number(productId.value)))
     
     if (!response.ok) {
       throw new Error('Product not found')

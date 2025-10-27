@@ -77,7 +77,29 @@ docker-compose exec email-service php artisan migrate --force
 
 ## Configuration
 
-Each service has a `.env` file for configuration. See `.env.example` files in each service directory for setup details.
+### Environment Variables
+
+**Docker Compose** (`.env` in project root):
+```env
+MYSQL_ROOT_PASSWORD=root
+MYSQL_USER=user
+MYSQL_PASSWORD=your_password
+```
+
+**Frontend** (`.env.development` / `.env.production` in frontend/):
+```env
+# Development
+VITE_API_CATALOG=http://localhost:8001
+VITE_API_CHECKOUT=http://localhost:8002
+VITE_API_EMAIL=http://localhost:8003
+
+# Production (on EC2)
+VITE_API_CATALOG=http://your-ec2-ip:8001
+VITE_API_CHECKOUT=http://your-ec2-ip:8002
+VITE_API_EMAIL=http://your-ec2-ip:8003
+```
+
+Each Laravel service also has a `.env` file. See `.env.example` files in each service directory.
 
 ## Project Structure
 

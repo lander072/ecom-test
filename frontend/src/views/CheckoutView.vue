@@ -2,6 +2,7 @@
 import { useCartStore } from '../stores/cart'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { API_CONFIG } from '../config/api'
 
 const cartStore = useCartStore()
 const router = useRouter()
@@ -64,7 +65,7 @@ const confirmOrder = async () => {
     }
 
     // Call checkout API
-    const response = await fetch('http://localhost:8002/api/checkout', {
+    const response = await fetch(`${API_CONFIG.CHECKOUT}/api/checkout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

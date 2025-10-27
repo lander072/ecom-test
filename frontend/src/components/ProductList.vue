@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { useCartStore } from '../stores/cart'
+import { API_ENDPOINTS } from '../config/api'
 
 interface Product {
   id: number
@@ -23,7 +24,7 @@ const error = ref('')
 const fetchProducts = async () => {
   try {
     loading.value = true
-    const response = await fetch('http://localhost:8001/api/products')
+    const response = await fetch(API_ENDPOINTS.products)
     const data = await response.json()
     products.value = data.data
   } catch (err) {
