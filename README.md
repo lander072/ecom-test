@@ -35,7 +35,7 @@ Frontend (Vue.js) → Catalog Service → MySQL
 ### 1. Configure Environment
 
 ```bash
-# Copy the Docker environment template
+# Copy the Docker environment template (for root folder)
 cp .env.docker.example .env.docker
 
 # Edit .env.docker and set your MySQL passwords
